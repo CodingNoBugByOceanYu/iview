@@ -24,15 +24,6 @@ const config = {
                 loader: 'vue-loader'
             },
             {
-                test: /\.jsx$/,
-                use: {
-                    loader: 'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-react']
-                    }
-                }
-            },
-            {
                 test: /\.css$/,
                 // style-loader是将外部css文件注入html文件中，最后将html文件中的css 用css-loader进行解析
                 use: [
@@ -60,7 +51,7 @@ const config = {
         //能够在js代码中引用到，并且vue也能够根据此进行分类打包
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: isDev ? '"development"' : '"production"'
+                NODE_ENV: isDev ? '"development"' : '"production"',
             }
         }),
         new HtMLPlugin(),
