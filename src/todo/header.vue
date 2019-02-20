@@ -1,17 +1,17 @@
 <template>
     <header class="main-header">
-        <h1> 待办列表 </h1>
     </header>
 </template>
 <style lang="stylus" scoped>
     .main-header {
-        text-align center
-        h1 {
-            font-size 100px
-            color rgba(254, 254, 254, 0.4)
-            font-weight 100
-            margin 20px
-        }
+        line-height: 50px;
+        height: 50px;
+        background: #0184ce;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        top: 0;
+        z-index: 66;
 
     }
 </style>

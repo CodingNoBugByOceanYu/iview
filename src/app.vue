@@ -2,17 +2,14 @@
     <div id="app">
         <div id="cover"></div>
         <Header></Header>
-        <Todo></Todo>
     </div>
 </template>
 
 <script>
 import Header from './todo/header.vue'
-import Todo from './todo/todo.vue'
 export default {
     components: {
-        Header,
-        Todo
+        Header
     }
 }
 </script>
@@ -31,7 +28,7 @@ export default {
         right 0
         top 0
         bottom 0
-        background-color #555
+        background-color #ddd
         opacity 0.5
         z-index -1
     }
