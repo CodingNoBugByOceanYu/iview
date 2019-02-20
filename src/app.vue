@@ -1,15 +1,21 @@
 <template>
     <div id="app">
-        <div id="cover"></div>
         <Header></Header>
+        <Workplace></Workplace>
+        <Content></Content>
+
     </div>
 </template>
 
 <script>
-import Header from './todo/header.vue'
+import Header from './application/header.vue'
+import Workplace from './application/workplace.vue'
+import Content from './application/Content.vue'
 export default {
     components: {
-        Header
+        Header,
+        Workplace,
+        Content
     }
 }
 </script>
@@ -22,14 +28,4 @@ export default {
         bottom 0
     }
 
-    #cover {
-        position absolute
-        left 0
-        right 0
-        top 0
-        bottom 0
-        background-color #ddd
-        opacity 0.5
-        z-index -1
-    }
 </style>
