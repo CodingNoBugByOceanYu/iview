@@ -44,6 +44,10 @@ const config = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(ttf|eot|svg|woff|woff2)$/,
+                use: 'url-loader'
             }
         ]
     },
