@@ -1,17 +1,17 @@
 <template>
     <div id="content">
-        <Tab></Tab>
         <Infos></Infos>
+        <!-- <Testinfos /> -->
     </div>
 </template>
 
 <script>
-import Tab from './tab.vue'
 import Infos from './infos.vue'
+// import Testinfos from './testinfo.vue'
 export default {
     components: {
-        Tab,
-        Infos
+        Infos,
+        // Testinfos
     }
 }
 </script>
