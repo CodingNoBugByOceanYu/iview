@@ -1,23 +1,27 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Workplace></Workplace>
-        <Content></Content>
-
+        <div class="inner-view">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
 <script>
-import Header from './application/header.vue'
-import Workplace from './application/workplace.vue'
-import Content from './application/Content.vue'
+import Header from '@/views/layout/header.vue'
 export default {
+    name: 'app',
+    data() {
+      return {}
+    },
     components: {
-        Header,
-        Workplace,
-        Content
+        Header
+    },
+    mounted: function () {
+        this.$router.push('/login')
     }
-}
+    
+  }
 </script>
 <style lang="stylus" scoped>
 #app {
@@ -27,5 +31,8 @@ export default {
         top 0
         bottom 0
     }
-
+.inner-view 
+    margin-top 50px
+    width 100%
+    height 100%
 </style>

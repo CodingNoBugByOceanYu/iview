@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import App from './app.vue';
 import iView from 'iview';
-import VueRouter from 'vue-router';
 import underscore from 'vue-underscore';
+import router from '@/router/router.js';
 
-import './assets/styles/global.styl';
+import '@/assets/styles/global.styl';
 import 'iview/dist/styles/iview.css';
+
+Vue.use(router);
+Vue.use(iView);
+Vue.use(underscore);
 
 const root = document.createElement('div')
 document.body.appendChild(root)
 
-Vue.use(iView);
-Vue.use(VueRouter);
-Vue.use(underscore);
 
-new Vue({
-    render: (h) =>h(App)
+const app = new Vue({
+    router,
+    render: (h) => h(App)
 }).$mount(root)

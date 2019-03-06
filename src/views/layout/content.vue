@@ -1,17 +1,14 @@
 <template>
     <div id="content">
         <Infos></Infos>
-        <!-- <Testinfos /> -->
     </div>
 </template>
 
 <script>
 import Infos from './infos.vue'
-// import Testinfos from './testinfo.vue'
 export default {
     components: {
-        Infos,
-        // Testinfos
+        Infos
     }
 }
 </script>

@@ -53,7 +53,8 @@ const config = {
     },
     resolve: {
         alias: {
-            'vue': 'vue/dist/vue.min.js'
+            'vue': 'vue/dist/vue.min.js',
+            '@': path.join(__dirname, 'src')
         }
     },
     plugins: [
@@ -87,18 +88,24 @@ if (isDev) {
     });
     config.devtool = '#cheap-module-eval-source-map'
     config.devServer = {
-        port: 8088,
+        port: 8087,
         //host 可以通过localhost进行访问，同时也可以通过本机的内网id进行访问，就能够在别的网页或者手机上访问
-        host: '0.0.0.0',
+        host: '127.0.0.1',
         //overlay 编译过程有任何错误都直接显示到网页上
         overlay: {
             errors: true
         },
         // 当修改组件代码时，只重新渲染当前组件，不会让整个页面重新加载
-        hot: true
+        hot: true,
 
         // 能够在运行后直接打开浏览器
-        // open: true
+        open: true,
+        proxy: {
+            '/': {
+                target: 'http://192.168.8.20:18004',
+                changeOrigin: true
+            }
+        }
     }
     // 启动webpack.hot功能的插件
     config.plugins.push(

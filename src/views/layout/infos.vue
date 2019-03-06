@@ -5,7 +5,7 @@
         <Table  border  :stripe="showStripe" :columns="columns1" :data="list"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="totalList" :current="1"  @on-change="changePage"></Page>
+                <Page :total="totalList" :current="currentPage" show-total  @on-change="changePage"></Page>
             </div>
         </div>
     </div>
@@ -72,27 +72,58 @@ export default {
                 ],
             list: [],
             showStripe: true,
-            totalList: ''
+            totalList: '',
+            currentPage: ''
         }
     },
     methods: {
         changePage: function(pageNum)  {
+            var _this = this;
 
-            axios.get('./src/assets/data.json')
+            this.currentPage = pageNum;
+            axios.get(
+            '/oracleDemo/oracleDemo/oracleDemoPage',
+            {   
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
+                },
+                params: {
+                    currentPage: this.currentPage,
+                    size: 10
+                }
+            })
             .then(function (response) {
-                _this.list = response.data.root.response_body;
-                // console.log(_this.list);
+                if (response.status === 200) {
+                    var res = response.data.resultBody;
+                
+                    _this.list = res.records;
+                    _this.totalList = res.total;
+                }
             })
             .catch(function (error) {
                 console.log(error);
             });
             
         },
-        addOne: () => {
-            console.log(1111);
+        addOne: function() {
+            var _this = this;
         },
-        deleteData: (tes) => {
-            console.log(tes);
+        deleteData: function(tes) {
+            var _this = this;
+
+            axios.delete('/oracleDemo/oracleDemo/' + tes.row.oracleDemoId,
+            {   
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
+                }
+            })
+            .then(function (response) {
+                console.log('delete', response);
+                if (response.status === 200) {
+                    alert('删除成功')
+                    _this.changePage(1);
+                }
+            })
         },
         editData: (res) => {
             console.log(res);
@@ -101,22 +132,25 @@ export default {
     created() {
         var _this = this;
 
+        this.currentPage = 1
         axios.get(
             '/oracleDemo/oracleDemo/oracleDemoPage',
-            {
+            {   
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
+                },
                 params: {
-                    currentPage: '1',
+                    currentPage: 1,
                     size: 10
                 }
             })
             .then(function (response) {
-                if (response.code === '000000') {
-
-                    var res = response.resultBody;
-
+                console.log(response);
+                if (response.status === 200) {
+                    var res = response.data.resultBody;
+                    
                     _this.list = res.records;
                     _this.totalList = res.total;
-
                 }
             })
             .catch(function (error) {
