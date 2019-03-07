@@ -1,12 +1,16 @@
 <template>
   <div>
         <h1>test workspace</h1>
-        <Button type="success" @click="addOne">添加</Button>
+        <Button type="success" @click="showPannel = true">添加</Button>
         <Table  border  :stripe="showStripe" :columns="columns1" :data="list"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page :total="totalList" :current="currentPage" show-total  @on-change="changePage"></Page>
             </div>
+        </div>
+        <div v-show="showPannel">
+            <Input v-model="newName" placeholder="Enter something..." clearable style="width: 200px" />
+            <Button type="primary" @click="addOne">确定</Button>
         </div>
     </div>
 </template>
@@ -73,7 +77,9 @@ export default {
             list: [],
             showStripe: true,
             totalList: '',
-            currentPage: ''
+            currentPage: '',
+            newName: '',
+            showPannel: false
         }
     },
     methods: {
@@ -98,6 +104,7 @@ export default {
                 
                     _this.list = res.records;
                     _this.totalList = res.total;
+                    console.log('res111', res); 
                 }
             })
             .catch(function (error) {
@@ -107,10 +114,47 @@ export default {
         },
         addOne: function() {
             var _this = this;
+            let instance = axios.create();
+            let data = {};
+
+            instance.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token');
+            instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+            if (_.isEmpty(this.editId)) {
+                data = {
+                    name: _this.newName
+                }
+    
+                instance.post('/oracleDemo/oracleDemo/',
+                    data
+                ).then(function (response) {
+                    if (response.status === 200) {
+                        alert('添加成功');
+                        _this.changePage(1);
+                        _this.showPannel = false;
+                    }
+                })
+            } else {
+                data = {
+                    name: _this.newName,
+                    oracleDemoId: _this.editId
+                }
+    
+                instance.put('/oracleDemo/oracleDemo/',
+                    data
+                ).then(function (response) {
+                    if (response.status === 200) {
+                        alert('编辑成功');
+                        _this.changePage(1);
+                        _this.showPannel = false;
+                        _this.editId = '';
+                    }
+                })
+            }
+
         },
         deleteData: function(tes) {
             var _this = this;
-
             axios.delete('/oracleDemo/oracleDemo/' + tes.row.oracleDemoId,
             {   
                 headers: {
@@ -118,15 +162,30 @@ export default {
                 }
             })
             .then(function (response) {
-                console.log('delete', response);
                 if (response.status === 200) {
                     alert('删除成功')
                     _this.changePage(1);
                 }
             })
         },
-        editData: (res) => {
-            console.log(res);
+        editData: function(tes) {
+            this.showPannel = true;
+            this.editId = tes.row.oracleDemoId;
+            console.log(this.editId);
+            axios.get(
+            '/oracleDemo/oracleDemo/' + this.editId,
+            {   
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
+                }
+            })
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    // _this.newName = 
+                }
+            })
+
         }
     },
     created() {
@@ -145,12 +204,12 @@ export default {
                 }
             })
             .then(function (response) {
-                console.log(response);
                 if (response.status === 200) {
                     var res = response.data.resultBody;
                     
                     _this.list = res.records;
                     _this.totalList = res.total;
+                    console.log('init', res);
                 }
             })
             .catch(function (error) {
