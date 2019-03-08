@@ -109,7 +109,6 @@ export default {
                 
                     _this.list = res.records;
                     _this.totalList = res.total;
-                    console.log('res111', res); 
                 }
             })
             .catch(function (error) {
@@ -166,7 +165,6 @@ export default {
         editData: function(tes) {
             this.showPannel = true;
             this.editId = tes.row.oracleDemoId;
-            console.log(this.editId);
             axios.get(
             '/oracleDemo/oracleDemo/' + this.editId,
             {   
@@ -175,7 +173,6 @@ export default {
                 }
             })
             .then(function (response) {
-                console.log(response);
                 if (response.status === 200) {
                     // _this.newName = 
                 }
@@ -204,7 +201,6 @@ export default {
                     
                     _this.list = res.records;
                     _this.totalList = res.total;
-                    console.log('init', res);
                 }
             })
             .catch(function (error) {
