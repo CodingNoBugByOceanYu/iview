@@ -127,7 +127,7 @@ export default {
                 }
 
                 addInfo('post', data).then(response => {
-                    alert('新增成功');
+                    _this.$Message.success('新增成功');
                     _this.changePage(1);
                     _this.showPannel = false;
                 })
@@ -139,7 +139,7 @@ export default {
                 }
 
                 addInfo('put', data).then(response => {
-                    alert('编辑成功');
+                    _this.$Message.success('编辑成功');
                     _this.changePage(1);
                     _this.showPannel = false;
                     _this.editId = '';
@@ -157,7 +157,7 @@ export default {
             })
             .then(function (response) {
                 if (response.status === 200) {
-                    alert('删除成功')
+                    _this.$Message.success('删除成功');
                     _this.changePage(1);
                 }
             })

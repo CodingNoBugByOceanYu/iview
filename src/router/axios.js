@@ -3,6 +3,7 @@ import NProgress from 'nprogress' // progress bar
 import errorCode from '@/const/errorCode'
 import router from "@/router/router"
 import axios from 'axios'
+import iView from 'iview';
 import 'nprogress/nprogress.css'
 
 let instance = axios.create();
@@ -42,7 +43,7 @@ instance.interceptors.response.use(res => {
     }
 
     if (status !== 200 || res.data.code === 1) {
-        alert(message);
+        iView.$Message.error(message);
         return Promise.reject(new Error(message))
     }
 
