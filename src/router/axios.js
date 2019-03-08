@@ -5,15 +5,16 @@ import router from "@/router/router"
 import axios from 'axios'
 import 'nprogress/nprogress.css'
 
-axios.defaults.timeout = 30000
+let instance = axios.create();
+
+instance.defaults.timeout = 20000
 // 返回其他状态吗
-axios.defaults.validateStatus = function (status) {
+instance.defaults.validateStatus = function (status) {
     return status >= 200 && status <= 500 // 默认的
 }
 
-// 跨域请求，允许保存cookie
-axios.defaults.withCredentials = true
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+instance.defaults.withCredentials = true // 表示跨域请求时是否需要使用凭证, 默认false
+instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // NProgress Configuration
 NProgress.configure({
@@ -21,10 +22,9 @@ NProgress.configure({
 })
 
 // HTTPrequest拦截
-axios.interceptors.request.use(config => {
+instance.interceptors.request.use(config => {
     NProgress.start() // start progress bar
     config.headers['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token')
-    console.log('config', config);
     return config
 }, error => {
     return Promise.reject(error)
@@ -32,7 +32,7 @@ axios.interceptors.request.use(config => {
 
 
 // HTTPresponse拦截
-axios.interceptors.response.use(res => {
+instance.interceptors.response.use(res => {
     NProgress.done()
     const status = Number(res.status) || 200
     const message = res.data.msg || errorCode[status] || errorCode['default']
@@ -52,4 +52,4 @@ axios.interceptors.response.use(res => {
     return Promise.reject(new Error(error))
 })
 
-export default axios
+export default instance

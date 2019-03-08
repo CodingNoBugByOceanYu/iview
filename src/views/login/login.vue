@@ -9,20 +9,36 @@
                     <tr>
                         <th>用户名:</th>
                         <td>
-                            <Input type="text" prefix="ios-contact" size="large" placeholder="请输入用户名" v-model="username" clearable style="width: auto" />
+                            <Input type="text" 
+                                prefix="ios-contact" 
+                                size="large" 
+                                placeholder="请输入用户名" 
+                                v-model="username" 
+                                clearable 
+                                style="width: auto" 
+                                name="account"
+                                v-validate.initial="'required'"
+                                :class="{'input': true, 'is-danger': errors.has('account') }"/>
+                                <div v-show="errors.has('account')" class="help loginmt is-danger"> 姓名不能为空 </div>
                         </td>
                     </tr>
                     <tr>
                         <th>密码:</th>
                         <td>
-                            <Input type="password" prefix="ios-lock"  size="large" placeholder="请输入密码" v-model="password" clearable style="width: auto" />
+                            <Input type="password" prefix="ios-lock"  size="large" placeholder="请输入密码" v-model="password" clearable
+                            style="width: auto" name="upasswd"
+                                v-validate.initial="'required'"
+                                :class="{'input': true, 'is-danger': errors.has('upasswd') }"/>
+                            <div v-show="errors.has('upasswd')" class="help loginmt is-danger"> 密码不能为空 </div>
                         </td>
                     </tr>
                     <tr>
                         <th>验证码:</th>
                         <td>
-                            <Input type="text"  clearable v-model="authCode" size="large" style="width: 100px" />
+                            <Input type="text"  clearable v-model="authCode" size="large" style="width: 100px" name="uCode" v-validate.initial="'required'"
+                                :class="{'input': true, 'is-danger': errors.has('uCode') }"/>
                               <img :src="codeSrc" @click="getCode">
+                            <div v-show="errors.has('uCode')" class="help loginmt is-danger"> 验证码不能为空 </div>
                         </td>
                     </tr>
                 </table>
@@ -144,4 +160,7 @@ table td
 
 .goIn
     margin-left: 45%;
+
+.loginmt 
+    margin-top -20px
 </style>

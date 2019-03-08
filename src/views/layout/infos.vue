@@ -9,7 +9,10 @@
             </div>
         </div>
         <div v-show="showPannel">
-            <Input v-model="newName" placeholder="Enter something..." clearable style="width: 200px" />
+            <Input v-model="newName" placeholder="Enter something..."
+                clearable style="width: 200px" name="testname" v-validate.initial="'required'"
+                :class="{'input': true, 'is-danger': errors.has('testname') }"/>
+            <div v-show="errors.has('testname')" class="help loginmt is-danger"> 不能为空 </div>
             <Button type="primary" @click="addOne">确定</Button>
         </div>
     </div>
@@ -19,6 +22,8 @@
 //注入axio
 import axios from 'axios'
 import {_} from 'vue-underscore';
+
+import { addInfo } from "@/api/default";
 
 export default {
     name: 'workspace',
@@ -114,41 +119,31 @@ export default {
         },
         addOne: function() {
             var _this = this;
-            let instance = axios.create();
             let data = {};
 
-            instance.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem('access_token');
-            instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
+        
             if (_.isEmpty(this.editId)) {
                 data = {
                     name: _this.newName
                 }
-    
-                instance.post('/oracleDemo/oracleDemo/',
-                    data
-                ).then(function (response) {
-                    if (response.status === 200) {
-                        alert('添加成功');
-                        _this.changePage(1);
-                        _this.showPannel = false;
-                    }
+
+                addInfo('post', data).then(response => {
+                    alert('新增成功');
+                    _this.changePage(1);
+                    _this.showPannel = false;
                 })
+
             } else {
                 data = {
                     name: _this.newName,
                     oracleDemoId: _this.editId
                 }
-    
-                instance.put('/oracleDemo/oracleDemo/',
-                    data
-                ).then(function (response) {
-                    if (response.status === 200) {
-                        alert('编辑成功');
-                        _this.changePage(1);
-                        _this.showPannel = false;
-                        _this.editId = '';
-                    }
+
+                addInfo('put', data).then(response => {
+                    alert('编辑成功');
+                    _this.changePage(1);
+                    _this.showPannel = false;
+                    _this.editId = '';
                 })
             }
 

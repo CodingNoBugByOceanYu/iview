@@ -1,20 +1,9 @@
-import 'nprogress/nprogress.css'
-import NProgress from 'nprogress' // progress bar
+import request from '@/router/axios'
 
-import axios from 'axios'
-
-NProgress.configure({
-    showSpinner: false
-})
-
-export const hughAxios = (type, url, params, data) => {
-    return axios({
+export const addInfo = (type,data) => {
+    return request({
+        url: '/oracleDemo/oracleDemo/',
         method: type,
-        url: url,
-        headers: {
-            Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
-        },
-        params: params,
         data: data
     })
 }
