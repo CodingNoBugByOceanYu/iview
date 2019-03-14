@@ -102,7 +102,8 @@ if (isDev) {
         open: true,
         proxy: {
             '/': {
-                target: 'http://192.168.8.20:18004',
+                target: 'http://172.24.2.38:18004',
+
                 changeOrigin: true
             }
         }

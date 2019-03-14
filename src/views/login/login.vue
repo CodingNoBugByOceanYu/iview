@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+    <div class="content">
         <div class="login-bg fl">
 
         </div>
@@ -65,7 +65,8 @@ export default {
             authCode: '',
             username: '',
             password: '',
-            codeSrc: ''
+            codeSrc: '',
+            test1: ''
         }
     },
     methods: {
@@ -97,8 +98,10 @@ export default {
                 }
             )
             .then(function (res) {
+                console.log(res)
                 if (res.status === 200) {
                     var resData = res.data;
+                    console.log(resData.access_token);
                     window.localStorage.setItem('access_token', resData.access_token);
                     window.localStorage.setItem('refresh_token', resData.refresh_token);
                     _this.$router.push('/main')
@@ -107,7 +110,7 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
-
+            _this.$router.push('/main')
         },
         getCode: function() {
             Verifykey = this.RndNum(4);

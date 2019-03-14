@@ -1,17 +1,17 @@
 <template>
     <div id="layout">
-        <Workplace></Workplace>
-        <Content></Content>
+        <Rmenu></Rmenu>
+        <div id="content">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
 <script>
-import Workplace from './workplace.vue'
-import Content from './Content.vue'
+import Rmenu from './rmenu.vue'
 export default {
     components: {
-        Workplace,
-        Content
+        Rmenu
     }
 }
 </script>
@@ -23,5 +23,8 @@ export default {
         top 0
         bottom 0
     }
-
+#content 
+    margin-top 50px
+    margin-left 240px
+    height calc(100% - 50px)
 </style>

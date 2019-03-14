@@ -44,14 +44,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CodingNoBugByOceanYu/iview.git"
+    "url": ""
   },
   "author": "hugh",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/CodingNoBugByOceanYu/iview/issues"
-  },
-  "homepage": "https://github.com/CodingNoBugByOceanYu/iview#readme",
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",
     "babel-preset-react": "^6.24.1",

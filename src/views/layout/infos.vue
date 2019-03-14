@@ -8,13 +8,20 @@
                 <Page :total="totalList" :current="currentPage" show-total  @on-change="changePage"></Page>
             </div>
         </div>
-        <div v-show="showPannel">
-            <Input v-model="newName" placeholder="Enter something..."
-                clearable style="width: 200px" name="testname" v-validate.initial="'required'"
-                :class="{'input': true, 'is-danger': errors.has('testname') }"/>
-            <div v-show="errors.has('testname')" class="help loginmt is-danger"> 不能为空 </div>
-            <Button type="primary" @click="addOne">确定</Button>
-        </div>
+        <Modal v-model="showPannel"  title="新建" width='600px'>
+            <Row>
+                <Col span="6" style="text-align:center">名称:</Col>
+                <Col span="18">
+                    <Input v-model="newName" placeholder="Enter something..."
+                        clearable style="width: 200px" name="testname" v-validate.initial="'required'"
+                        :class="{'input': true, 'is-danger': errors.has('testname') }"/>
+                    <div v-show="errors.has('testname')" class="help loginmt is-danger"> 不能为空 </div>
+                </Col>
+            </Row>
+            <div slot="footer">
+                <Button type="primary" @click="addOne">确定</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -23,7 +30,7 @@
 import axios from 'axios'
 import {_} from 'vue-underscore';
 
-import { addInfo } from "@/api/default";
+import { addInfo, getInfos, delInfo, editInfo } from "@/api/default";
 
 export default {
     name: 'workspace',
@@ -92,35 +99,22 @@ export default {
             var _this = this;
 
             this.currentPage = pageNum;
-            axios.get(
-            '/oracleDemo/oracleDemo/oracleDemoPage',
-            {   
-                headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
-                },
-                params: {
-                    currentPage: this.currentPage,
-                    size: 10
-                }
-            })
-            .then(function (response) {
-                if (response.status === 200) {
-                    var res = response.data.resultBody;
-                
-                    _this.list = res.records;
-                    _this.totalList = res.total;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
             
+            var params = {
+                currentPage: this.currentPage,
+                size: 10
+            }
+            getInfos('get', params).then(function (response) {
+                var res = response.data.resultBody;
+
+                _this.list = res.records;
+                _this.totalList = res.total;
+            });
         },
         addOne: function() {
             var _this = this;
             let data = {};
 
-        
             if (_.isEmpty(this.editId)) {
                 data = {
                     name: _this.newName
@@ -149,63 +143,36 @@ export default {
         },
         deleteData: function(tes) {
             var _this = this;
-            axios.delete('/oracleDemo/oracleDemo/' + tes.row.oracleDemoId,
-            {   
-                headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
-                }
-            })
-            .then(function (response) {
-                if (response.status === 200) {
-                    _this.$Message.success('删除成功');
-                    _this.changePage(1);
-                }
-            })
+
+            delInfo('delete', tes.row.oracleDemoId).then(() => {
+                _this.$Message.success('删除成功');
+                _this.changePage(1);
+            });
         },
         editData: function(tes) {
+            var _this = this;
             this.showPannel = true;
             this.editId = tes.row.oracleDemoId;
-            axios.get(
-            '/oracleDemo/oracleDemo/' + this.editId,
-            {   
-                headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
-                }
-            })
-            .then(function (response) {
-                if (response.status === 200) {
-                    // _this.newName = 
-                }
-            })
 
+            editInfo('get', this.editId).then((res) => {
+                _this.newName = res.data.name;
+            })
         }
     },
     created() {
-        var _this = this;
+        let _this = this;
+        let params = {
+            currentPage: 1,
+            size: 10
+        };
+    console.log('created')
+        getInfos('get', params).then(function (response) {
+            console.log(response);
+            var res = response.data.resultBody;
 
-        this.currentPage = 1
-        axios.get(
-            '/oracleDemo/oracleDemo/oracleDemoPage',
-            {   
-                headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem('access_token')  //token
-                },
-                params: {
-                    currentPage: 1,
-                    size: 10
-                }
-            })
-            .then(function (response) {
-                if (response.status === 200) {
-                    var res = response.data.resultBody;
-                    
-                    _this.list = res.records;
-                    _this.totalList = res.total;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            _this.list = res.records;
+            _this.totalList = res.total;
+        });
     }
 }
 </script>
@@ -216,26 +183,26 @@ thead {
 }
 
 .mu-checkbox-svg-icon {
-	height: 16px;
+    height: 16px;
     width: 16px;
 }
 
 .mu-checkbox-icon {
-	height: 16px;
+    height: 16px;
     width: 16px;
 }
 
 .mu-checkbox-ripple-wrapper {
-	width: 40px;
+    width: 40px;
     height: 30px;
     top: -5px;
 }
 
 .mu-checkbox-wrapper {
-	height: 30px;
+    height: 30px;
 }
 .mu-tr, .mu-th, .mu-td {
-	height: 40px;
+    height: 40px;
 }
 
 </style>
