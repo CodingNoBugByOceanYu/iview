@@ -27,9 +27,9 @@ const router = new VueRouter({
                 }
             ]
         },
-        // {
-        //     path: '*', component: Login
-        // }
+        {
+            path: '*', component: Login
+        }
     ]
 })
 
